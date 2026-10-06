@@ -1,5 +1,6 @@
 package com.harshith.job_tracker.controller;
 
+import com.harshith.job_tracker.dto.StatusUpdateRequest;
 import com.harshith.job_tracker.model.JobApplication;
 import com.harshith.job_tracker.service.JobApplicationService;
 import jakarta.validation.Valid;
@@ -27,5 +28,26 @@ public class JobApplicationController {
     @GetMapping
     public List<JobApplication> list() {
         return service.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public JobApplication getOne(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public JobApplication update(@PathVariable Long id, @Valid @RequestBody JobApplication application) {
+        return service.update(id, application);
+    }
+
+    @PatchMapping("/{id}/status")
+    public JobApplication updateStatus(@PathVariable Long id, @Valid @RequestBody StatusUpdateRequest request) {
+        return service.updateStatus(id, request.status());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }
