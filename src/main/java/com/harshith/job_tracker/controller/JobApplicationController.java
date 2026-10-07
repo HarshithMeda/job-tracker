@@ -1,13 +1,13 @@
 package com.harshith.job_tracker.controller;
 
+import com.harshith.job_tracker.dto.PageResponse;
 import com.harshith.job_tracker.dto.StatusUpdateRequest;
+import com.harshith.job_tracker.model.ApplicationStatus;
 import com.harshith.job_tracker.model.JobApplication;
 import com.harshith.job_tracker.service.JobApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -26,8 +26,14 @@ public class JobApplicationController {
     }
 
     @GetMapping
-    public List<JobApplication> list() {
-        return service.findAll();
+    public PageResponse<JobApplication> list(
+            @RequestParam(required = false) ApplicationStatus status,
+            @RequestParam(required = false) String company,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "appliedDate") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        return service.search(status, company, page, size, sortBy, direction);
     }
 
     @GetMapping("/{id}")
