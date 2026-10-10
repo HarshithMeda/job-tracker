@@ -1,5 +1,7 @@
 package com.harshith.job_tracker.controller;
 
+import com.harshith.job_tracker.dto.AuthResponse;
+import com.harshith.job_tracker.dto.LoginRequest;
 import com.harshith.job_tracker.dto.RegisterRequest;
 import com.harshith.job_tracker.dto.UserResponse;
 import com.harshith.job_tracker.model.AppUser;
@@ -23,5 +25,10 @@ public class AuthController {
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         AppUser user = authService.register(request);
         return new UserResponse(user.getId(), user.getEmail());
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }
