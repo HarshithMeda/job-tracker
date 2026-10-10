@@ -5,6 +5,7 @@ import com.harshith.job_tracker.exception.ResourceNotFoundException;
 import com.harshith.job_tracker.model.ApplicationStatus;
 import com.harshith.job_tracker.model.JobApplication;
 import com.harshith.job_tracker.repository.JobApplicationRepository;
+import com.harshith.job_tracker.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +22,20 @@ public class JobApplicationService {
             Set.of("id", "companyName", "jobTitle", "status", "appliedDate");
 
     private final JobApplicationRepository repository;
+    private final UserRepository userRepository;
 
-    public JobApplicationService(JobApplicationRepository repository) {
+    public JobApplicationService(JobApplicationRepository repository, UserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
-    public JobApplication create(JobApplication application) {
+    public JobApplication create(Long ownerId, JobApplication application) {
         application.setId(null); // a new application always gets a new id
+        application.setOwner(userRepository.getReferenceById(ownerId));
         return repository.save(application);
     }
 
-    public PageResponse<JobApplication> search(ApplicationStatus status, String company,
+    public PageResponse<JobApplication> search(Long ownerId, ApplicationStatus status, String company,
                                                int page, int size, String sortBy, String direction) {
         String sortField = SORTABLE_FIELDS.contains(sortBy) ? sortBy : "appliedDate";
         Sort.Direction sortDirection = "asc".equalsIgnoreCase(direction) ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -41,7 +45,8 @@ public class JobApplicationService {
         Pageable pageable = PageRequest.of(safePage, safeSize,
                 Sort.by(sortDirection, sortField).and(Sort.by("id")));
 
-        Specification<JobApplication> spec = (root, query, cb) -> cb.conjunction();
+        Specification<JobApplication> spec =
+                (root, query, cb) -> cb.equal(root.get("owner").get("id"), ownerId);
 
         if (status != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
@@ -56,13 +61,13 @@ public class JobApplicationService {
                 result.getTotalElements(), result.getTotalPages());
     }
 
-    public JobApplication findById(Long id) {
-        return repository.findById(id)
+    public JobApplication findById(Long ownerId, Long id) {
+        return repository.findByIdAndOwner_Id(id, ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Application not found with id " + id));
     }
 
-    public JobApplication update(Long id, JobApplication updated) {
-        JobApplication existing = findById(id);
+    public JobApplication update(Long ownerId, Long id, JobApplication updated) {
+        JobApplication existing = findById(ownerId, id);
         existing.setCompanyName(updated.getCompanyName());
         existing.setJobTitle(updated.getJobTitle());
         existing.setStatus(updated.getStatus());
@@ -72,14 +77,14 @@ public class JobApplicationService {
         return repository.save(existing);
     }
 
-    public JobApplication updateStatus(Long id, ApplicationStatus status) {
-        JobApplication existing = findById(id);
+    public JobApplication updateStatus(Long ownerId, Long id, ApplicationStatus status) {
+        JobApplication existing = findById(ownerId, id);
         existing.setStatus(status);
         return repository.save(existing);
     }
 
-    public void delete(Long id) {
-        JobApplication existing = findById(id);
+    public void delete(Long ownerId, Long id) {
+        JobApplication existing = findById(ownerId, id);
         repository.delete(existing);
     }
 }
