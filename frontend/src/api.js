@@ -35,7 +35,7 @@ async function request(path, options = {}) {
     return null
   }
 
-  let data = null
+  let data
   try {
     data = await response.json()
   } catch {
