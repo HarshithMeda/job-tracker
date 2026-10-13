@@ -89,3 +89,129 @@ button.link {
   font-size: 14px;
   text-align: center;
 }
+
+.card.wide {
+  max-width: 920px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.topbar button {
+  margin: 0;
+  background: #6b7280;
+}
+
+h3 {
+  margin: 24px 0 4px;
+  font-size: 16px;
+}
+
+select,
+textarea {
+  padding: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+form.add-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+form.filters {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+form.filters input {
+  flex: 1;
+  min-width: 160px;
+}
+
+form.filters button {
+  margin: 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+th {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+td select {
+  padding: 6px;
+  font-size: 14px;
+}
+
+button.danger {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: #dc2626;
+}
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.pager button {
+  margin: 0;
+  padding: 8px 14px;
+}
+
+.empty {
+  padding: 24px 0;
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  form.add-form {
+    grid-template-columns: 1fr;
+  }
+}

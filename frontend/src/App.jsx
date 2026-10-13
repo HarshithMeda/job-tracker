@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { clearToken, getMe, getToken } from './api'
 import LoginPage from './LoginPage'
+import HomePage from './HomePage'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(Boolean(getToken()))
   const [email, setEmail] = useState('')
+
+  const handleLogout = useCallback(() => {
+    clearToken()
+    setEmail('')
+    setLoggedIn(false)
+  }, [])
 
   useEffect(() => {
     if (!loggedIn) {
@@ -14,30 +21,16 @@ function App() {
       .then((data) => setEmail(data.email))
       .catch((err) => {
         if (err.status === 401) {
-          clearToken()
-          setLoggedIn(false)
+          handleLogout()
         }
       })
-  }, [loggedIn])
-
-  function handleLogout() {
-    clearToken()
-    setEmail('')
-    setLoggedIn(false)
-  }
+  }, [loggedIn, handleLogout])
 
   if (!loggedIn) {
     return <LoginPage onLoggedIn={() => setLoggedIn(true)} />
   }
 
-  return (
-    <div className="card">
-      <h1>Job Application Tracker</h1>
-      <p>Welcome{email ? ', ' + email : ''}.</p>
-      <p className="hint">Your applications will appear here in Part C.</p>
-      <button type="button" onClick={handleLogout}>Log out</button>
-    </div>
-  )
+  return <HomePage email={email} onLogout={handleLogout} />
 }
 
 export default App

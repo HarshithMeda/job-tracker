@@ -69,3 +69,34 @@ export async function login(email, password) {
 export function getMe() {
   return request('/api/me')
 }
+
+export function listApplications({ status, company, page, size }) {
+  const params = new URLSearchParams()
+  if (status) {
+    params.set('status', status)
+  }
+  if (company) {
+    params.set('company', company)
+  }
+  params.set('page', page)
+  params.set('size', size)
+  return request('/api/applications?' + params.toString())
+}
+
+export function createApplication(application) {
+  return request('/api/applications', {
+    method: 'POST',
+    body: JSON.stringify(application),
+  })
+}
+
+export function updateStatus(id, status) {
+  return request('/api/applications/' + id + '/status', {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  })
+}
+
+export function deleteApplication(id) {
+  return request('/api/applications/' + id, { method: 'DELETE' })
+}
