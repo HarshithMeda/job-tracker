@@ -35,3 +35,5 @@ build/
 local.properties
 
 .env
+
+.DS_Store
