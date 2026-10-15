@@ -20,7 +20,6 @@ A full-stack web app for tracking job applications. Users register, log in, and 
 |---|---|
 | ![Search and filter](docs/screenshots/search-and-filter.png) | ![Second user, empty list](docs/screenshots/second-user-empty.png) |
 
-![Live demo](docs/screenshots/live-demo.png)
 
 ## Features
 
