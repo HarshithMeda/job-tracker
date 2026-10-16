@@ -8,7 +8,7 @@ A full-stack web app for tracking job applications. Users register, log in, and 
 
 > The demo runs on free hosting and **sleeps after 15 minutes of inactivity**. The first visit can take about a minute to wake up.
 >
-> Demo login: `demo@example.com` / `DemoPass2026` (a shared test account with fake data only; please don't store real information in it).
+> Demo login: `demo.viewer@example.com` / `DemoPass2026` (a shared test account with fake data only; please don't store real information in it).
 
 ## Screenshots
 
